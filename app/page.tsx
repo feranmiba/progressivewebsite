@@ -118,7 +118,7 @@ function MyComponent() {
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
             A lightweight, customizable React component library for creating stunning visual progress indicators. 
-            Built by <span className="font-bold">feranmiba</span> for developers who love colorful UIs.
+            Built by <span className="font-bold">developers</span> for developers who love colorful UIs.
           </p>
 
           {/* Installation */}
