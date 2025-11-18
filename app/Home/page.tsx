@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { CircularProgress } from "progressive-shapes";
+import { CircularProgress, Heart  } from "progressive-shapes";
 import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
+
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -69,6 +70,18 @@ const App = () => {
             <p className="text-sm text-gray-600">Custom Style</p>
           </div>
         </div>
+
+
+        <div className="flex flex-col items-center space-y-2">
+  <Heart
+    currentStep={currentStep}
+    totalSteps={totalSteps}
+    size={100}
+    backgroundColor="#FFE4E6"
+    progressColor="#DC2626"
+  />
+  <p className="text-sm text-gray-600">Heart Progress</p>
+</div>
 
         {/* Button */}
         <motion.button
