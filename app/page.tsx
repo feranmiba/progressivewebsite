@@ -1,394 +1,381 @@
 "use client"
 
+import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
+import Link from 'next/link';
+import { FaGithub, FaStar, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { Moon, Sun, Code, Accessibility, Settings, Heart, ArrowRight, Sparkles } from "lucide-react";
+import { CircularProgress, Heart as HeartShape, Star, Donut, Diamond, Triangle, Moon as MoonShape, Pentagon, Hexagon, Cloud } from "progressive-shapes";
 
-import React, { useState } from 'react';
-import { FaGithub, FaNpm, FaCode, FaPalette, FaRocket, FaCopy } from 'react-icons/fa';
-import { CircularProgress, Heart, Star, Diamond, Triangle, Donut } from "progressive-shapes";
+export default function ProgressiveShapesLanding() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [demoStep, setDemoStep] = useState(3);
 
-export default function ProgressiveShapesWebsite() {
-  const [currentStep, setCurrentStep] = useState(5);
-  const [totalSteps, setTotalSteps] = useState(8);
-  const [size, setSize] = useState(100);
-  const [backgroundColor, setBackgroundColor] = useState('#FFE4E6');
-  const [progressColor, setProgressColor] = useState('#DC2626');
-  const [thickness, setThickness] = useState(0.3);
-  const [copied, setCopied] = useState('');
+  // Auto-animate demo step
+  useEffect(() => {
+    setMounted(true);
+    const interval = setInterval(() => {
+      setDemoStep(prev => (prev >= 5 ? 1 : prev + 1));
+    }, 1500);
+    return () => clearInterval(interval);
+  }, []);
 
-  const shapes = [
-    { 
-      id: 'circular', 
-      name: 'CircularProgress',
-      component: CircularProgress,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor }
+  const features = [
+    {
+      title: "Free and Open Source",
+      description: "Use it without cost or restrictions — built by the community, for the community.",
+      icon: <Heart className="w-8 h-8 text-pink-500" />,
+      bg: "bg-pink-100 dark:bg-pink-500/20"
     },
-    { 
-      id: 'heart', 
-      name: 'Heart',
-      component: Heart,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor }
+    {
+      title: "Customizable",
+      description: "Easily tweak colors, sizes, and styles to match your design.",
+      icon: <Settings className="w-8 h-8 text-indigo-500" />,
+      bg: "bg-indigo-100 dark:bg-indigo-500/20"
     },
-    { 
-      id: 'star', 
-      name: 'Star',
-      component: Star,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor }
+    {
+      title: "Accessible",
+      description: "Comes with built-in ARIA support for screen readers and assistive tech.",
+      icon: <Accessibility className="w-8 h-8 text-emerald-500" />,
+      bg: "bg-emerald-100 dark:bg-emerald-500/20"
     },
-    { 
-      id: 'diamond', 
-      name: 'Diamond',
-      component: Diamond,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor }
-    },
-    { 
-      id: 'triangle', 
-      name: 'Triangle',
-      component: Triangle,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor }
-    },
-    { 
-      id: 'donut', 
-      name: 'Donut',
-      component: Donut,
-      props: { currentStep, totalSteps, size, backgroundColor, progressColor, thickness }
-    },
+    {
+      title: "Easy to Use",
+      description: "Simple API designed for fast integration.",
+      icon: <Code className="w-8 h-8 text-blue-500" />,
+      bg: "bg-blue-100 dark:bg-blue-500/20"
+    }
   ];
 
-  const generateCode = (shape: any) => {
-    const hasThickness = shape.id === 'donut';
-    return `import { ${shape.name} } from "progressive-shapes";
+  const shapesList = [
+    { name: 'Circular', Component: CircularProgress, color: '#6366f1' },
+    { name: 'Heart', Component: HeartShape, color: '#ec4899' },
+    { name: 'Star', Component: Star, color: '#eab308' },
+    { name: 'Donut', Component: Donut, color: '#10b981' },
+    { name: 'Diamond', Component: Diamond, color: '#8b5cf6' },
+    { name: 'Triangle', Component: Triangle, color: '#f97316' },
+    { name: 'Moon', Component: MoonShape, color: '#3b82f6' },
+    { name: 'Pentagon', Component: Pentagon, color: '#14b8a6' },
+    { name: 'Hexagon', Component: Hexagon, color: '#f43f5e' },
+    { name: 'Cloud', Component: Cloud, color: '#0ea5e9' }
+  ];
 
-function MyComponent() {
-  return (
-    <${shape.name}
-      currentStep={${currentStep}}
-      totalSteps={${totalSteps}}
-      size={${size}}
-      backgroundColor="${backgroundColor}"
-      progressColor="${progressColor}"${hasThickness ? `\n      thickness={${thickness}}` : ''}
-    />
-  );
-}`;
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    }
   };
 
-  const handleCopy = (code: any, shapeName: any) => {
-    navigator.clipboard.writeText(code);
-    setCopied(shapeName);
-    setTimeout(() => setCopied(''), 2000);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
   };
 
+  const marqueeTexts = [
+    'import { Donut } from "progressive-shapes"',
+    'import { Heart } from "progressive-shapes"',
+    'import { Star } from "progressive-shapes"',
+    'import { Cloud } from "progressive-shapes"',
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
-        <div className="absolute inset-0 bg-black/10" />
-        <nav className="relative container mx-auto px-6 py-6 flex items-center justify-between">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-indigo-500/30 transition-colors duration-300 flex flex-col overflow-x-hidden">
+      
+      {/* Navbar */}
+      <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-              <FaPalette className="text-white text-xl" />
+            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <span className="text-white font-bold text-lg leading-none tracking-tighter">PS</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">
-              Progressive Shapes
-            </h1>
+            <span className="font-extrabold text-lg tracking-tight">progressive-shapes</span>
           </div>
+          
           <div className="flex items-center gap-4">
             <a
-              href="https://www.npmjs.com/package/progressive-shapes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition font-medium shadow-lg"
-            >
-              <FaNpm className="text-xl" />
-              <span>NPM</span>
-            </a>
-            <a
               href="https://github.com/feranmiba/progressive-shapes"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition font-medium shadow-lg"
+              className="hidden sm:flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
-              <FaGithub className="text-xl" />
-              <span>GitHub</span>
+              <FaGithub size={18} />
+              GitHub
             </a>
-          </div>
-        </nav>
-
-        <div className="relative container mx-auto px-6 py-20 text-center">
-          <h2 className="text-6xl font-bold mb-6 text-white drop-shadow-lg">
-            Beautiful Progress Indicators
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            A lightweight, customizable React component library for creating stunning visual progress indicators. 
-            Built by <span className="font-bold">developers</span> for developers who love colorful UIs.
-          </p>
-
-          {/* Installation */}
-          <div className="max-w-2xl mx-auto bg-gray-900 rounded-xl p-6 text-left shadow-2xl">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-auto text-gray-400 text-sm">Terminal</span>
-            </div>
-            <code className="text-green-400 text-lg">npm install progressive-shapes</code>
+            <div className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block"></div>
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+            )}
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Interactive Controls */}
-      <div className="container mx-auto px-6 py-12">
-        <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl p-8 mb-12">
-          <h3 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-3">
-            <FaCode className="text-indigo-600" />
-            Interactive Playground
-          </h3>
-          <p className="text-gray-600 mb-8">Adjust the values below and watch all shapes update in real-time!</p>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative pt-20 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
+          {/* Animated Background Elements */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full blur-3xl -z-10 opacity-50 animate-pulse"></div>
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-pink-500/10 dark:bg-pink-500/10 rounded-full blur-3xl -z-10 opacity-30"></div>
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-3xl -z-10 opacity-30"></div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Current Step: <span className="text-indigo-600">{currentStep}</span>
-              </label>
-              <input
-                type="range"
-                min="0"
-                max={totalSteps}
-                value={currentStep}
-                onChange={(e) => setCurrentStep(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-              />
-            </div>
+          <div className="max-w-5xl mx-auto px-6 text-center">
+            <motion.div
+              initial="hidden"
+              animate="show"
+              variants={containerVariants}
+              className="space-y-8"
+            >
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium border border-slate-200 dark:border-slate-700">
+                <Sparkles size={16} className="text-yellow-500" />
+                v1.1.6 Now Available
+              </motion.div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Total Steps: <span className="text-purple-600">{totalSteps}</span>
-              </label>
-              <input
-                type="range"
-                min="1"
-                max="20"
-                value={totalSteps}
-                onChange={(e) => setTotalSteps(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
-              />
-            </div>
+              <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
+                Progress Indicators <br className="hidden sm:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+                  Made Elegant.
+                </span>
+              </motion.h1>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Size: <span className="text-pink-600">{size}px</span>
-              </label>
-              <input
-                type="range"
-                min="50"
-                max="200"
-                value={size}
-                onChange={(e) => setSize(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pink-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Background Color
-              </label>
-              <div className="flex gap-2 items-center">
-                <input
-                  type="color"
-                  value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
-                  className="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-300"
-                />
-                <input
-                  type="text"
-                  value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
-                  className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Progress Color
-              </label>
-              <div className="flex gap-2 items-center">
-                <input
-                  type="color"
-                  value={progressColor}
-                  onChange={(e) => setProgressColor(e.target.value)}
-                  className="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-300"
-                />
-                <input
-                  type="text"
-                  value={progressColor}
-                  onChange={(e) => setProgressColor(e.target.value)}
-                  className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Donut Thickness: <span className="text-indigo-600">{thickness.toFixed(2)}</span>
-              </label>
-              <input
-                type="range"
-                min="0.1"
-                max="0.5"
-                step="0.05"
-                value={thickness}
-                onChange={(e) => setThickness(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-              />
-            </div>
+              <motion.p variants={itemVariants} className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                A free, open-source React library providing beautiful, customizable, and accessible progress shapes. Lightweight and built for modern web experiences with zero hassle.
+              </motion.p>
+              
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a
+                  href="https://github.com/feranmiba/progressive-shapes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-xl shadow-slate-900/20 dark:shadow-white/20"
+                >
+                  <FaStar className="text-yellow-400" />
+                  Give it a Star
+                </a>
+                <Link
+                  href="/explore"
+                  className="w-full sm:w-auto px-8 py-4 bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 rounded-2xl font-bold text-lg hover:bg-indigo-100 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <Sparkles size={20} />
+                  View Docs
+                </Link>
+                <div className="hidden lg:flex w-full sm:w-auto px-6 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl items-center justify-center gap-3 shadow-sm font-mono text-sm text-slate-700 dark:text-slate-300">
+                  <span className="text-slate-400">$</span> npm i progressive-shapes
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
+        </section>
 
-        {/* Shapes Grid */}
-        <div className="text-center mb-8">
-          <h3 className="text-4xl font-bold text-gray-800 mb-3">Available Shapes</h3>
-          <p className="text-lg text-gray-600">See how each shape renders with your custom settings</p>
-        </div>
+        {/* Infinite Marquee Slider */}
+        <section className="py-6 bg-slate-900 dark:bg-slate-950 border-y border-slate-800 shadow-inner overflow-hidden relative">
+          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-slate-900 dark:from-slate-950 to-transparent z-10"></div>
+          <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-slate-900 dark:from-slate-950 to-transparent z-10"></div>
+          <motion.div 
+            className="flex gap-8 whitespace-nowrap items-center font-mono text-lg font-medium text-emerald-400"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ ease: "linear", duration: 15, repeat: Infinity }}
+          >
+            {[...Array(3)].map((_, i) => (
+              <React.Fragment key={i}>
+                {marqueeTexts.map((text, idx) => (
+                  <div key={idx} className="flex items-center gap-8">
+                    <span>{text}</span>
+                    <span className="text-slate-700">•</span>
+                  </div>
+                ))}
+              </React.Fragment>
+            ))}
+          </motion.div>
+        </section>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {shapes.map((shape) => {
-            const ShapeComponent = shape.component;
-            const code = generateCode(shape);
+        {/* Shapes Showcase */}
+        <section className="py-24 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">10+ Available Shapes</h2>
+            <p className="text-slate-600 dark:text-slate-400 mb-16 max-w-xl mx-auto">
+              From classic donuts and circles to playful hearts and stars. Whatever your project needs, we have a shape for it.
+            </p>
             
-            return (
-              <div key={shape.id} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition">
-                {/* Preview Section */}
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-12 flex items-center justify-center min-h-[280px]">
-                  <ShapeComponent {...shape.props} />
-                </div>
-                
-                {/* Info Section */}
-                <div className="p-6">
-                  <h4 className="text-2xl font-bold text-gray-800 mb-3">{shape.name}</h4>
-                  <div className="bg-gray-900 rounded-lg p-4 mb-4 relative">
-                    <button
-                      onClick={() => handleCopy(code, shape.name)}
-                      className="absolute top-2 right-2 p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition text-sm flex items-center gap-1"
-                    >
-                      <FaCopy />
-                      {copied === shape.name ? 'Copied!' : 'Copy'}
-                    </button>
-                    <pre className="text-green-400 text-xs overflow-x-auto pr-20">
-                      <code>{code}</code>
-                    </pre>
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span>Progress: <strong>{Math.round((currentStep / totalSteps) * 100)}%</strong></span>
-                    <span>{currentStep} / {totalSteps}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="bg-white py-20 mt-20">
-        <div className="container mx-auto px-6">
-          <h3 className="text-4xl font-bold text-center mb-16 text-gray-800">Why Progressive Shapes?</h3>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="text-center p-8 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaRocket className="text-white text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold mb-3 text-gray-800">Lightweight</h4>
-              <p className="text-gray-600">Zero dependencies. Pure CSS and SVG. Minimal bundle size impact on your project.</p>
-            </div>
-            <div className="text-center p-8 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaCode className="text-white text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold mb-3 text-gray-800">TypeScript Ready</h4>
-              <p className="text-gray-600">Full TypeScript support with type definitions included out of the box.</p>
-            </div>
-            <div className="text-center p-8 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-br from-pink-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaPalette className="text-white text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold mb-3 text-gray-800">Fully Customizable</h4>
-              <p className="text-gray-600">Every color, size, and property is customizable to match your design system.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {shapesList.map((shape, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.05, type: "spring", bounce: 0.4 }}
+                  whileHover={{ y: -8, scale: 1.05 }}
+                  className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col items-center justify-center gap-4 group cursor-pointer"
+                >
+                  <shape.Component 
+                    currentStep={demoStep} 
+                    totalSteps={5} 
+                    size={64} 
+                    progressColor={shape.color} 
+                    backgroundColor={theme === 'dark' ? '#334155' : '#f1f5f9'} 
+                    {...(shape.name === 'Donut' ? { thickness: 0.3 } : {})}
+                  />
+                  <span className="font-bold text-slate-700 dark:text-slate-300 group-hover:text-indigo-500 transition-colors">{shape.name}</span>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Contribution CTA */}
-      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h3 className="text-5xl font-bold text-white mb-6">Open Source & Community Driven</h3>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Progressive Shapes was built by <a href="https://github.com/feranmiba" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-white">feranmiba</a> to help developers 
-            create more colorful and engaging UIs. <strong>We welcome contributions!</strong>
-          </p>
-          <p className="text-lg text-white/80 mb-10 max-w-2xl mx-auto">
-            Have an idea for a new shape? Want to improve existing ones? The project is open for contributions. 
-            Help us make UI development more fun and colorful for everyone! 🎨
-          </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <a
-              href="https://github.com/feranmiba/progressive-shapes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-white hover:bg-gray-100 text-indigo-600 font-bold rounded-xl transition shadow-xl flex items-center gap-2 text-lg"
+        {/* What You Can Achieve Section */}
+        <section className="py-24 relative overflow-hidden">
+          {/* subtle background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-transparent to-pink-50/60 dark:from-indigo-950/30 dark:via-transparent dark:to-pink-950/30 -z-10" />
+
+          <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
             >
-              <FaGithub className="text-2xl" />
-              Contribute on GitHub
-            </a>
-            <a
-              href="https://github.com/feranmiba/progressive-shapes/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-bold rounded-xl transition shadow-xl flex items-center gap-2 text-lg"
-            >
-              <FaCode className="text-2xl" />
-              Request a Shape
-            </a>
+              <span className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 mb-5">What You Can Achieve</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+                Build Experiences That <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Stand Out</span>
+              </h2>
+              <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+                Drop progressive-shapes into any React project and instantly elevate how users experience progress.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  emoji: "✨",
+                  color: "from-indigo-500 to-purple-600",
+                  bg: "bg-indigo-50 dark:bg-indigo-900/20",
+                  border: "border-indigo-100 dark:border-indigo-800/40",
+                  title: "Make Your Project Beautiful",
+                  desc: "Replace boring progress bars with expressive, colorful shapes that delight users on first glance. Every screen instantly looks more polished and professional."
+                },
+                {
+                  emoji: "🚀",
+                  color: "from-pink-500 to-rose-600",
+                  bg: "bg-pink-50 dark:bg-pink-900/20",
+                  border: "border-pink-100 dark:border-pink-800/40",
+                  title: "Enhance Onboarding Flows",
+                  desc: "Use a Heart or Star shape to walk users through your app's setup steps. Visual progress motivates users to complete onboarding and reduces drop-off."
+                },
+                {
+                  emoji: "📋",
+                  color: "from-emerald-500 to-teal-600",
+                  bg: "bg-emerald-50 dark:bg-emerald-900/20",
+                  border: "border-emerald-100 dark:border-emerald-800/40",
+                  title: "Multi-Step Forms Made Fun",
+                  desc: "Show users exactly where they are in a multi-step form. The visual feedback keeps them engaged and reduces abandonment rates drastically."
+                },
+                {
+                  emoji: "🎯",
+                  color: "from-yellow-500 to-orange-500",
+                  bg: "bg-yellow-50 dark:bg-yellow-900/20",
+                  border: "border-yellow-100 dark:border-yellow-800/40",
+                  title: "Gamify Task Completion",
+                  desc: "Add a game-like feel to task lists and achievement trackers. When progress is visual and rewarding, users stay motivated to keep going."
+                },
+                {
+                  emoji: "📊",
+                  color: "from-blue-500 to-cyan-500",
+                  bg: "bg-blue-50 dark:bg-blue-900/20",
+                  border: "border-blue-100 dark:border-blue-800/40",
+                  title: "Dashboards & Analytics",
+                  desc: "Embed Donut or Circular shapes into your dashboards to visualize KPIs, completion rates, and data at a glance — no chart library needed."
+                },
+                {
+                  emoji: "⚡",
+                  color: "from-violet-500 to-purple-600",
+                  bg: "bg-violet-50 dark:bg-violet-900/20",
+                  border: "border-violet-100 dark:border-violet-800/40",
+                  title: "Zero Setup, Maximum Impact",
+                  desc: "Install once, import what you need, and ship. No config files, no theming setup — just beautiful progress shapes in minutes."
+                }
+              ].map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.08, type: "spring", bounce: 0.3 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  className={`rounded-3xl p-8 border ${item.bg} ${item.border} shadow-lg shadow-slate-200/30 dark:shadow-none cursor-default`}
+                >
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-2xl mb-6 shadow-lg`}>
+                    {item.emoji}
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{item.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        {/* Why Use Section */}
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Why Use progressive-shapes?</h2>
+            </div>
+
+            <motion.div 
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={containerVariants}
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {features.map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/30 dark:shadow-none hover:-translate-y-2 transition-transform duration-300"
+                >
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.bg}`}>
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{feature.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                    {feature.description}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h4 className="text-2xl font-bold mb-2">Progressive Shapes</h4>
-            <p className="text-gray-400">Making progress indicators beautiful, one shape at a time.</p>
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center text-center space-y-4">
+          <div className="w-10 h-10 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <span className="font-bold text-xs tracking-tighter">PS</span>
           </div>
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <a
-              href="https://github.com/feranmiba/progressive-shapes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition"
-            >
-              <FaGithub className="text-2xl" />
+          <div className="flex gap-4">
+            <a href="https://github.com/feranmiba" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <FaGithub size={24} />
             </a>
-            <a
-              href="https://www.npmjs.com/package/progressive-shapes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition"
-            >
-              <FaNpm className="text-2xl" />
+            <a href="https://x.com/emmanuel_amiola" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-500 transition-colors">
+              <FaTwitter size={24} />
+            </a>
+            <a href="https://www.linkedin.com/in/amiola-demilade-5a46801a8/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-700 transition-colors">
+              <FaLinkedin size={24} />
             </a>
           </div>
-          <p className="text-center text-gray-400">
-            Created with ❤️ by{' '}
-            <a
-              href="https://github.com/feranmiba"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-indigo-400 hover:text-indigo-300 font-medium"
-            >
-              feranmiba
-            </a>
-          </p>
-          <p className="text-center text-gray-500 text-sm mt-2">Open Source • MIT License</p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">amiola_dev 2026&copy;</p>
         </div>
       </footer>
     </div>
